@@ -32,11 +32,11 @@ function Maker({ authService }) {
         },
         {
             id: "3",
-            name: "Jaeyoung",
-            company: "Spring Cloud",
-            title: "Front Enginner",
+            name: "YoungJu",
+            company: "Cha Hospital",
+            title: "Nurse",
             theme: "colorful",
-            email: "jaey5oung@naver.com",
+            email: "dudwn326@naver.com",
             message: "go for it",
             fileName: "Jaeyoung",
             fileUrl: null,
@@ -55,11 +55,22 @@ function Maker({ authService }) {
         });
     });
 
+    const addCard = (card) => {
+        const updated = [...cards, card];
+        setCards(updated);
+    };
+    const updateCard = (card) => {
+      console.log(card);
+    };
+    const deleteCard = (card) => {
+    console.log(card);
+    };
+
     return (
         <section className={styles.maker}>
             <Header onLogout={onLogout} />
             <div className={styles.container}>
-                <Editor cards={cards} />
+                <Editor cards={cards} addCard={addCard} updateCard={updateCard} deleteCard={deleteCard} />
                 <Preview cards={cards} />
             </div>
             <Footer />
