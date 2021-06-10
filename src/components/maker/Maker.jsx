@@ -6,9 +6,9 @@ import { useHistory } from "react-router";
 import Editor from "../editor/Editor";
 import Preview from "../preview/Preview";
 
-function Maker({ authService }) {
-    const [cards, setCards] = useState([
-        {
+function Maker({ FileInput,authService }) {
+    const [cards, setCards] = useState({
+        1: {
             id: "1",
             name: "Jaeyoung",
             company: "Spring Cloud",
@@ -19,7 +19,7 @@ function Maker({ authService }) {
             fileName: "Jaeyoung",
             fileUrl: null,
         },
-        {
+        2: {
             id: "2",
             name: "Yeonhee",
             company: "On Side",
@@ -30,18 +30,8 @@ function Maker({ authService }) {
             fileName: "Yeonhee",
             fileUrl: null,
         },
-        {
-            id: "3",
-            name: "YoungJu",
-            company: "Cha Hospital",
-            title: "Nurse",
-            theme: "colorful",
-            email: "dudwn326@naver.com",
-            message: "go for it",
-            fileName: "Jaeyoung",
-            fileUrl: null,
-        },
-    ]);
+    });
+
     const history = useHistory();
     const onLogout = () => {
         authService.logout();
@@ -55,22 +45,34 @@ function Maker({ authService }) {
         });
     });
 
-    const addCard = (card) => {
-        const updated = [...cards, card];
-        setCards(updated);
-    };
-    const updateCard = (card) => {
-      console.log(card);
+    //기존의 카드를 복사하고 추가하는거 하나만 card로 더해준다
+    //setCard로 업데이트된거 저장
+    const createOrupdateCard = (card) => {
+        setCards((cards) => {
+            const updated = { ...cards };
+            updated[card.id] = card;
+            return updated;
+        });
     };
     const deleteCard = (card) => {
-    console.log(card);
+        setCards((cards) => {
+            const updated = { ...cards };
+            delete updated[card.id];
+            return updated;
+        });
     };
 
     return (
         <section className={styles.maker}>
             <Header onLogout={onLogout} />
             <div className={styles.container}>
-                <Editor cards={cards} addCard={addCard} updateCard={updateCard} deleteCard={deleteCard} />
+                <Editor
+                FileInput={FileInput}
+                    cards={cards}
+                    addCard={createOrupdateCard}
+                    updateCard={createOrupdateCard}
+                    deleteCard={deleteCard}
+                />
                 <Preview cards={cards} />
             </div>
             <Footer />

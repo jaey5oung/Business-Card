@@ -1,9 +1,7 @@
 import React, { useRef } from "react";
 import styles from "./Card_edit_form.module.css";
 import Button from "../button/Button";
-import ImageFileInput from "../image_file_input/Image_file_input";
-
-function CardEditForm({ card,updateCard,deleteCard }) {
+function CardEditForm({ FileInput,card, updateCard, deleteCard }) {
     const nameRef = useRef();
     const companyRef = useRef();
     const themeRef = useRef();
@@ -14,17 +12,20 @@ function CardEditForm({ card,updateCard,deleteCard }) {
     const { name, company, title, email, message, theme, fileName, fileURL } =
         card;
     const onChange = (event) => {
-        if (event.current.Target == null) {
-            return 
+        if (event.target == null) {
+            return;
         }
-       
+        //current tartget이없으면 null이고 브라우저에서 기본적인이벤트를 처리하지않으면 preventDefault
         event.preventDefault();
         updateCard({
+            //chage가 발생하며 받아오는 updateCard를 이용한다
             ...card,
-            [event.currentTarget.name]:event.currentTarget.value
-        });
+            [event.target.name]: event.target.value,
+        }); //name = key
     };
-    const onSubmit = () => {};
+    const onSubmit = () => {
+        deleteCard(card);
+    };
     return (
         <form className={styles.form}>
             <input
@@ -77,7 +78,7 @@ function CardEditForm({ card,updateCard,deleteCard }) {
                 onChange={onChange}
             />
             <div className={styles.fileInput}>
-                <ImageFileInput />
+             <FileInput/>
             </div>
             <Button name="Delete" onClick={onSubmit} />
         </form>
