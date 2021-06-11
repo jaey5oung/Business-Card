@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styles from "./Card_edit_form.module.css";
 import Button from "../button/Button";
-function CardEditForm({ FileInput,card, updateCard, deleteCard }) {
+function CardEditForm({ FileInput, card, updateCard, deleteCard }) {
     const nameRef = useRef();
     const companyRef = useRef();
     const themeRef = useRef();
@@ -9,8 +9,15 @@ function CardEditForm({ FileInput,card, updateCard, deleteCard }) {
     const emailRef = useRef();
     const messageRef = useRef();
     console.log("-------카드정보------", card);
-    const { name, company, title, email, message, theme, fileName, fileURL } =
+    const { name, company, title, email, message, theme, fileName } =
         card;
+    const onFileChange = (file) => {
+        updateCard({
+            ...card,
+            fileName: file.name,
+            fileURL: file.url,
+        });
+    };
     const onChange = (event) => {
         if (event.target == null) {
             return;
@@ -78,7 +85,7 @@ function CardEditForm({ FileInput,card, updateCard, deleteCard }) {
                 onChange={onChange}
             />
             <div className={styles.fileInput}>
-             <FileInput/>
+                <FileInput name={fileName} onFileChange={onFileChange} />
             </div>
             <Button name="Delete" onClick={onSubmit} />
         </form>

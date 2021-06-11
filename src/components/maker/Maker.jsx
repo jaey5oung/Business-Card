@@ -6,40 +6,21 @@ import { useHistory } from "react-router";
 import Editor from "../editor/Editor";
 import Preview from "../preview/Preview";
 
-function Maker({ FileInput,authService }) {
-    const [cards, setCards] = useState({
-        1: {
-            id: "1",
-            name: "Jaeyoung",
-            company: "Spring Cloud",
-            title: "Front Enginner",
-            theme: "dark",
-            email: "jaey5oung@naver.com",
-            message: "go for it",
-            fileName: "Jaeyoung",
-            fileUrl: null,
-        },
-        2: {
-            id: "2",
-            name: "Yeonhee",
-            company: "On Side",
-            title: "Management Support",
-            theme: "light",
-            email: "qlcdmcjstk@naver.com",
-            message: "go for it",
-            fileName: "Yeonhee",
-            fileUrl: null,
-        },
-    });
-
+function Maker({ FileInput, authService, cardRepository }) {
     const history = useHistory();
+    const historyState = history?.location?.state;
+    const [cards, setCards] = useState({});
+    const [userId, setUserId] = useState(history && historyState.id);
+
     const onLogout = () => {
         authService.logout();
     };
     //user가 로그아웃된다면 === 없다면
     useEffect(() => {
         authService.onAuthChange((user) => {
-            if (!user) {
+            if (user) {
+                setUserId(user.uid);
+            } else {
                 history.push("/");
             }
         });
@@ -53,6 +34,7 @@ function Maker({ FileInput,authService }) {
             updated[card.id] = card;
             return updated;
         });
+        cardRepository.saveCard(userId, card);
     };
     const deleteCard = (card) => {
         setCards((cards) => {
@@ -67,7 +49,7 @@ function Maker({ FileInput,authService }) {
             <Header onLogout={onLogout} />
             <div className={styles.container}>
                 <Editor
-                FileInput={FileInput}
+                    FileInput={FileInput}
                     cards={cards}
                     addCard={createOrupdateCard}
                     updateCard={createOrupdateCard}
